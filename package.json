@@ -1,0 +1,30 @@
+{
+  "name": "exercise-tracker",
+  "version": "1.0.0",
+  "description": "An express API to perform CRUD operations on a MongoDB. Used to keep track of exercises over time. ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XLpacman805/exercise-tracker.git"
+  },
+  "keywords": [
+    "freecodecamp",
+    "exercise",
+    "tracker"
+  ],
+  "author": "Johnny Meza",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/XLpacman805/exercise-tracker/issues"
+  },
+  "homepage": "https://github.com/XLpacman805/exercise-tracker#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
