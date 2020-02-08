@@ -26,3 +26,15 @@ test()
     }).catch((err) => {
         console.log(err);
     });
+
+    exports.insertUser = function(user) {
+        return new Promise((resolve, reject) => {
+            MongoClient.connect(MONGODB_URI, (err, client) => {
+                if (err) reject (err);
+                const collection = client.db(dbName).collection(collectionName);
+                query = {};
+                // write the code to insert. 
+                
+            });
+        });
+    }
