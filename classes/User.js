@@ -1,6 +1,11 @@
 exports.User = class User {
-    constructor(username, log) {
+    /**
+     * The class for a user
+     * @param {String} username - The username. 
+     * @param {Array.<Exercise>} logs - Is an array of all exercises for the user.
+     */
+    constructor(username, logs) {
         this.username = username;
-        this.log = log;
+        this.logs = logs;
     }
 }

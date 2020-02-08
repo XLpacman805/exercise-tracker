@@ -15,8 +15,17 @@ app.get('/', (req, res) => {
 });
 
 app.post('/new-user', (req, res) => {
-    let username = req.body.username; 
-    res.json({data: username});
+    const username = req.body.username;
+    // Create a new user with the given username.
+    if (typeof(username) === "string" && username.length > 0) {
+        let user = new User(username, []);
+        //Insert user into the database.
+
+
+        res.json({data: user});
+    } else {
+        res.json({error: "Error with checking data type of username. Ensure that you are passing a string."});
+    }
 });
 
 // listen for requests //process.env.PORT
