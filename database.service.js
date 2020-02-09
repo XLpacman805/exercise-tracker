@@ -34,7 +34,11 @@ test()
                 const collection = client.db(dbName).collection(collectionName);
                 query = {};
                 // write the code to insert. 
-                
+                collection.insertOne(user, (err, result) => {
+                    if (err) reject (err);
+                    resolve (result.ops[0]);
+                    client.close();
+                });
             });
         });
     }
