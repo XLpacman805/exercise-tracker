@@ -36,8 +36,8 @@ app.post('/new-user', (req, res) => {
 app.post('/add', (req, res) => {
     const userId= req.body.userId;
     const description = req.body.description;
-    const date = validateDate(req.body.date);
-
+    let date = validateDate(req.body.date);
+    if (date instanceof Error) {date = date.message}
     res.json({data: date});
 });
 
@@ -48,7 +48,7 @@ const listener = app.listen(process.env.PORT, () => {
 
   function validateDate (date) {
       const dateFormatCharacterLimit = 10; // yyyy-mm-dd
-      let validDate = "Error validating date. Please format your date as a yyyy-mm-dd string."; //default error. 
+      let validDate = new Error("Error validating date. Please format your date as a yyyy-mm-dd string."); //default error. 
       if (typeof(date) === "undefined" || date.length < 1) { //if date is undefined or empty
         // Create a new valid date
         let d = new Date();
