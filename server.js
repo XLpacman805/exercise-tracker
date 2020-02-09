@@ -33,7 +33,37 @@ app.post('/new-user', (req, res) => {
     }
 });
 
+app.post('/add', (req, res) => {
+    const userId= req.body.userId;
+    const description = req.body.description;
+    const date = validateDate(req.body.date);
+
+    res.json({data: date});
+});
+
 // listen for requests //process.env.PORT
 const listener = app.listen(process.env.PORT, () => {
     console.log('Your app is listening on port ' + listener.address().port);
   });
+
+  function validateDate (date) {
+      const dateFormatCharacterLimit = 10; // yyyy-mm-dd
+      let validDate = "Error validating date. Please format your date as a yyyy-mm-dd string."; //default error. 
+      if (typeof(date) === "undefined" || date.length < 1) { //if date is undefined or empty
+        // Create a new valid date
+        let d = new Date();
+        let year = d.getUTCFullYear().toString();
+        let month = d.getUTCMonth().toString();
+        if (month.length < 10) {month = "0" + month} // adds the 0 to the beginning month string.
+        let date = d.getUTCDate().toString();
+        if (date.length < 10) {date = "0" + date} // adds the 0 to the beginning of the date string
+        validDate = year + "-" + month + "-" + date; //yyyy-mm-dd
+      } else if (date.length === dateFormatCharacterLimit) {
+          /* if the date has the right number of characters, check if it's actually a date.
+          * If its not then do nothing and let the function throw an error.
+          */ 
+         let d = new Date(date); 
+         if (d != "Invalid Date") {validDate = date} // if the date is not invalid, then it's valid! 
+      }
+      return validDate;
+  }
