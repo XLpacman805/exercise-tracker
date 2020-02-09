@@ -36,9 +36,12 @@ app.post('/new-user', (req, res) => {
 app.post('/add', (req, res) => {
     const userId= req.body.userId;
     const description = req.body.description;
+    const duration = req.body.duration;
     let date = validateDate(req.body.date);
     if (date instanceof Error) {date = date.message}
-    res.json({data: date});
+
+    let exercise = new Exercise(description, duration, date);
+    res.json({data: exercise});
 });
 
 // listen for requests //process.env.PORT
