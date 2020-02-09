@@ -39,9 +39,13 @@ app.post('/add', (req, res) => {
     const duration = req.body.duration;
     let date = validateDate(req.body.date);
     if (date instanceof Error) {date = date.message}
-
     let exercise = new Exercise(description, duration, date);
-    res.json({data: exercise});
+    databaseService.insertExercise(userId, exercise)
+        .then((result) => {
+            res.json({data: result});
+        }).catch((err) => {
+            res.json({error: err});
+        });
 });
 
 // listen for requests //process.env.PORT
