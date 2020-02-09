@@ -33,7 +33,6 @@ test()
             MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
                 if (err) reject (err);
                 const collection = client.db(dbName).collection(collectionName);
-                query = {}; //delete this in another commit.
                 // write the code to insert. 
                 collection.insertOne(user, (err, result) => {
                     if (err) reject (err);
