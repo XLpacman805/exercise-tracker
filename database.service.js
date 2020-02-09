@@ -6,7 +6,7 @@ const collectionName = "exercise-tracker";
 
 function test () {
     return new Promise((resolve, reject) => {
-        MongoClient.connect(MONGODB_URI, (err, client) => {
+        MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
             if (err) throw err; 
             const collection = client.db(dbName).collection(collectionName);
             query = {}; //empty to get all
@@ -29,7 +29,7 @@ test()
 
     exports.insertUser = function(user) {
         return new Promise((resolve, reject) => {
-            MongoClient.connect(MONGODB_URI, (err, client) => {
+            MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
                 if (err) reject (err);
                 const collection = client.db(dbName).collection(collectionName);
                 query = {};
