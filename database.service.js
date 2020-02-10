@@ -5,61 +5,49 @@ const MONGODB_URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSW
 const dbName = "development";
 const collectionName = "exercise-tracker";
 
-function test () {
+/**
+ * Responsible for connecting to the mongo database and inserting a User into a collection.
+ * @param {User} user - An instance of the User class. 
+ * @returns {Promise} - Resolves to an object containing the inserted document with it's _id. 
+ */
+exports.insertUser = function (user) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-            if (err) throw err; 
+            if (err) reject(err);
             const collection = client.db(dbName).collection(collectionName);
-            query = {}; //empty to get all
-            collection.find(query, (err, cursor) =>{
-                if (err) reject (err);
-                resolve (cursor);
+            // write the code to insert. 
+            collection.insertOne(user, (err, result) => {
+                if (err) reject(err);
+                resolve(result.ops[0]);
+                client.close();
             });
         });
     });
 }
 
-test()
-    .then((cursor) =>{
-        cursor.forEach((document) => {
-            console.log(document);
+/**
+ * Responsible for connecting to the mongo database and inserting an Exercise into a user's log. 
+ * @param {String} userId - The mongoDB _id string. 
+ * @param {Exercise} exercise - An instance of the exercise class. 
+ * @returns {Promise} - Resolves to an object with the up to date User.
+ */
+exports.insertExercise = function (userId, exercise) {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
+            if (err) reject(err);
+            const collection = client.db(dbName).collection(collectionName);
+            let query = { _id: new ObjectID(userId) } // the ID cannot be a string. Must be the Mongo ObjectID. 
+            // find user in collection. 
+            collection.updateOne(query, {
+                $push: { logs: exercise } //pushes the exercise to the logs array.
+            }, (err) => {
+                if (err) reject(err);
+                collection.findOne(query, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                    client.close;
+                })
+            });
         });
-    }).catch((err) => {
-        console.log(err);
     });
-
-    exports.insertUser = function(user) {
-        return new Promise((resolve, reject) => {
-            MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-                if (err) reject (err);
-                const collection = client.db(dbName).collection(collectionName);
-                // write the code to insert. 
-                collection.insertOne(user, (err, result) => {
-                    if (err) reject (err);
-                    resolve (result.ops[0]);
-                    client.close();
-                });
-            });
-        });
-    }
-
-    exports.insertExercise = function(userId, exercise) {
-        return new Promise ((resolve, reject) => {
-            MongoClient.connect(MONGODB_URI, {useUnifiedTopology: true}, (err, client)  => {
-                if (err) reject (err);
-                const collection = client.db(dbName).collection(collectionName);
-                let query = {_id : new ObjectID(userId)} // the ID cannot be a string. Must be the Mongo ObjectID. 
-                // find user in collection. 
-                collection.updateOne(query, {
-                    $push: {logs: exercise} //pushes the exercise to the logs array.
-                }, (err) => {
-                    if (err) reject (err);
-                    collection.findOne(query, (err, result) => {
-                        if (err) reject (err);
-                        resolve(result);
-                        client.close;
-                    })
-                });
-            });
-        });
-    }
+}
