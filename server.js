@@ -34,11 +34,11 @@ app.post('/new-user', (req, res) => {
 app.post('/add', (req, res) => {
     const userId= req.body.userId;
     const description = req.body.description;
-    let duration = parseInt(req.body.duration); //comes in as string so make it an Integer.
-    if (!duration) {duration = 0} //if null set to 0. 
+    let duration = req.body.duration;
     let date = validateDate(req.body.date);
     if (date instanceof Error) {res.json({error: date.message})}
-    let exercise = new Exercise(description, duration, date);
+    let exercise; // defined outside of try because closure!
+    try {exercise = new Exercise(description, duration, date)} catch(err) {res.json({error:err.message})} //error handling. 
     databaseService.insertExercise(userId, exercise)
         .then((result) => {
             res.json({data: result});

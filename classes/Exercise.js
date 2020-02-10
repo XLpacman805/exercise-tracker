@@ -6,7 +6,7 @@ exports.Exercise = class Exercise {
      * @param {String} date - Date in YYYY-MM-DD format.
      */
     constructor(description, duration, date) {
-        if (typeof(description) == "string" && typeof(duration) == "number" && typeof(date) == "string") {
+        if (typeof(description) == "string" && !isNaN(duration) && typeof(date) == "string") {
             this.description = description;
             this.duration = duration;
             this.date = date;
