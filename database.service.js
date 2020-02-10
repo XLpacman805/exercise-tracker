@@ -50,11 +50,16 @@ test()
                 const collection = client.db(dbName).collection(collectionName);
                 let query = {_id : new ObjectID(userId)} // the ID cannot be a string. Must be the Mongo ObjectID. 
                 // find user in collection. 
-                collection.findOne(query, (err, result) => {
+                collection.updateOne(query, {
+                    $push: {logs: exercise} //pushes the exercise to the logs array.
+                }, (err) => {
                     if (err) reject (err);
-                    resolve(result);
+                    collection.findOne(query, (err, result) => {
+                        if (err) reject (err);
+                        resolve(result);
+                        client.close;
+                    })
                 });
-                //insert Exercise into it's logs.
             });
         });
     }

@@ -38,7 +38,7 @@ app.post('/add', (req, res) => {
     const description = req.body.description;
     const duration = req.body.duration;
     let date = validateDate(req.body.date);
-    if (date instanceof Error) {date = date.message}
+    if (date instanceof Error) {res.json({error: date.message})}
     let exercise = new Exercise(description, duration, date);
     databaseService.insertExercise(userId, exercise)
         .then((result) => {
@@ -60,10 +60,10 @@ const listener = app.listen(process.env.PORT, () => {
         // Create a new valid date
         let d = new Date();
         let year = d.getUTCFullYear().toString();
-        let month = d.getUTCMonth().toString();
-        if (month.length < 10) {month = "0" + month} // adds the 0 to the beginning month string.
+        let month = (d.getUTCMonth() + 1).toString(); // plus one because month of January is 0. We want it to be 1.
+        if (month.length < 2) {month = "0" + month} // adds the 0 to the beginning month string.
         let date = d.getUTCDate().toString();
-        if (date.length < 10) {date = "0" + date} // adds the 0 to the beginning of the date string
+        if (date.length < 2) {date = "0" + date} // adds the 0 to the beginning of the date string
         validDate = year + "-" + month + "-" + date; //yyyy-mm-dd
       } else if (date.length === dateFormatCharacterLimit) {
           /* if the date has the right number of characters, check if it's actually a date.
