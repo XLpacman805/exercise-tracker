@@ -51,10 +51,10 @@ const listener = app.listen(process.env.PORT, () => {
     console.log('Your app is listening on port ' + listener.address().port);
   });
 
-  /**
-   * Responsible for returning an error or properly formatted date. 
-   * @param {String} date - A date string formatted as yyyy-mm-dd.
-   */
+/**
+ * Responsible for returning an error or properly formatted date.
+ * @param {String} date - A date string formatted as yyyy-mm-dd.
+ */
 function validateDate (date) {
       const dateFormatCharacterLimit = 10; // yyyy-mm-dd
       let validDate = new Error("Error validating date. Please format your date as a yyyy-mm-dd string."); //default error. 
