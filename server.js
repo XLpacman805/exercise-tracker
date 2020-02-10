@@ -34,7 +34,8 @@ app.post('/new-user', (req, res) => {
 app.post('/add', (req, res) => {
     const userId= req.body.userId;
     const description = req.body.description;
-    const duration = req.body.duration;
+    let duration = parseInt(req.body.duration); //comes in as string so make it an Integer.
+    if (!duration) {duration = 0} //if null set to 0. 
     let date = validateDate(req.body.date);
     if (date instanceof Error) {res.json({error: date.message})}
     let exercise = new Exercise(description, duration, date);
