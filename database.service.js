@@ -44,7 +44,7 @@ test()
     }
 
     exports.insertExercise = function(userId, exercise) {
-        return new Promise ((reject, resolve) => {
+        return new Promise ((resolve, reject) => {
             MongoClient.connect(MONGODB_URI, {useUnifiedTopology: true}, (err, client)  => {
                 if (err) reject (err);
                 const collection = client.db(dbName).collection(collectionName);
