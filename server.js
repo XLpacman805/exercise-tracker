@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
     res.json({data: myUser});
 });
 
-// Responsible for inerting a new user into the database. 
+// Responsible for inserting a new user into the database. 
 app.post('/new-user', (req, res) => {
     const username = req.body.username;
     // Create a new user with the given username.
@@ -33,6 +33,7 @@ app.post('/new-user', (req, res) => {
     }
 });
 
+// Responsible for inserting exercises into a user's log.
 app.post('/add', (req, res) => {
     const userId= req.body.userId;
     const description = req.body.description;
