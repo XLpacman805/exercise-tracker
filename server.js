@@ -47,6 +47,11 @@ app.post('/add', (req, res) => {
         });
 });
 
+// Responsible for getting all users with their id and username.
+app.get('/users', (req, res) => {
+    res.json({data: "hello world"});
+});
+
 // listen for requests //process.env.PORT
 const listener = app.listen(process.env.PORT, () => {
     console.log('Your app is listening on port ' + listener.address().port);
