@@ -66,6 +66,7 @@ const listener = app.listen(process.env.PORT, () => {
 /**
  * Responsible for returning an error or properly formatted date.
  * @param {String} date - A date string formatted as yyyy-mm-dd.
+ * @returns {Date} - A retuns a Date object in UTC timezone.  
  */
 function validateDate (date) {
       const dateFormatCharacterLimit = 10; // yyyy-mm-dd
@@ -80,5 +81,5 @@ function validateDate (date) {
          let d = new Date(date); 
          if (d != "Invalid Date") {validDate = d} // if the date is not invalid, then it's valid! 
       }
-      return validDate;
+      return new Date(validDate.toUTCString()); // Converts to UTC Date.
   }

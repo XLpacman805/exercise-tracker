@@ -9,7 +9,7 @@ exports.Exercise = class Exercise {
         if (typeof(description) == "string" && !isNaN(duration) && date instanceof Date) {
             this.description = description;
             this.duration = duration;
-            this.date = date;
+            this.date = date.toISOString();
         } else {
             throw new TypeError("Parameters failed type check. Ensure parameters are in valid format.");
         }
