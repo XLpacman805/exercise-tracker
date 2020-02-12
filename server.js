@@ -58,7 +58,13 @@ app.get('/users', (req, res) => {
         });
 });
 
+// Responsible for getting the exercise log for the given user and options
 app.get('/log', (req, res) => {
+    const userId = req.params.userId;
+    const fromDate = req.params.from;
+    const toDate = req.params.to;
+    const limit = req.params.limit; 
+    
     res.json({data: "Hello World"});
 });
 
