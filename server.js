@@ -9,7 +9,7 @@ const databaseService = require('./database.service');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.json({data: myUser});
+    res.json({data: "Hello world"});
 });
 
 // Responsible for inserting a new user into the database. 
@@ -76,25 +76,20 @@ const listener = app.listen(process.env.PORT, () => {
 /**
  * Responsible for returning an error or properly formatted date.
  * @param {String} date - A date string formatted as yyyy-mm-dd.
+ * @returns {Date} - A retuns a Date object in UTC timezone.  
  */
 function validateDate (date) {
       const dateFormatCharacterLimit = 10; // yyyy-mm-dd
       let validDate = new Error("Error validating date. Please format your date as a yyyy-mm-dd string."); //default error. 
       if (typeof(date) === "undefined" || date.length < 1) { //if date is undefined or empty
         // Create a new valid date
-        let d = new Date();
-        let year = d.getUTCFullYear().toString();
-        let month = (d.getUTCMonth() + 1).toString(); // plus one because month of January is 0. We want it to be 1.
-        if (month.length < 2) {month = "0" + month} // adds the 0 to the beginning month string.
-        let date = d.getUTCDate().toString();
-        if (date.length < 2) {date = "0" + date} // adds the 0 to the beginning of the date string
-        validDate = year + "-" + month + "-" + date; //yyyy-mm-dd
+        validDate = new Date();
       } else if (date.length === dateFormatCharacterLimit) {
           /* if the date has the right number of characters, check if it's actually a date.
           * If its not then do nothing and let the function throw an error.
           */ 
          let d = new Date(date); 
-         if (d != "Invalid Date") {validDate = date} // if the date is not invalid, then it's valid! 
+         if (d != "Invalid Date") {validDate = d} // if the date is not invalid, then it's valid! 
       }
-      return validDate;
+      return new Date(validDate.toUTCString()); // Converts to UTC Date.
   }
