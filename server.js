@@ -49,7 +49,13 @@ app.post('/add', (req, res) => {
 
 // Responsible for getting all users with their id and username.
 app.get('/users', (req, res) => {
-    res.json({data: "hello world"});
+    databaseService.getUsers()
+        .then((result) => {
+            res.json(result);
+        }).catch((err) => {
+            console.log(err);
+            res.json({error: err});
+        });
 });
 
 // listen for requests //process.env.PORT

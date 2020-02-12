@@ -51,3 +51,22 @@ exports.insertExercise = function (userId, exercise) {
         });
     });
 }
+
+/**
+ * Responsible for getting all the usernames & ids in the database.
+ * @returns {Promise} - resolves to a cursor array with all the usernames and ids. 
+ */
+exports.getUsers = function () {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(MONGODB_URI, {useUnifiedTopology: true}, (err, client) => {
+            if (err) reject(err);
+            const collection = client.db(dbName).collection(collectionName);
+            let query = {}
+            let projectionOptions = {_id:1, username: 1} //grab _id and useraname fields. 
+            collection.find(query, {projection: projectionOptions}, (err, cursor) => {
+                if (err) reject(err);
+                resolve(cursor.toArray());
+            });            
+        });
+    });
+}
