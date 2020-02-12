@@ -9,7 +9,7 @@ const databaseService = require('./database.service');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.json({data: myUser});
+    res.json({data: "Hello world"});
 });
 
 // Responsible for inserting a new user into the database. 
