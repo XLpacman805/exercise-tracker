@@ -60,12 +60,18 @@ app.get('/users', (req, res) => {
 
 // Responsible for getting the exercise log for the given user and options
 app.get('/log', (req, res) => {
-    const userId = req.params.userId;
-    const fromDate = req.params.from;
-    const toDate = req.params.to;
-    const limit = req.params.limit; 
-    
-    res.json({data: "Hello World"});
+    const userId = req.query.userId;
+    const fromDate = req.query.from;
+    const toDate = req.query.to;
+    const limit = req.querys.limit; 
+
+    console.log(userId);
+    databaseService.getLog(userId)
+        .then((result) => {
+            res.json(result);
+        }).catch((err) => {
+            res.json({error: err});
+        });
 });
 
 // listen for requests

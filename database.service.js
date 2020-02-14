@@ -70,3 +70,18 @@ exports.getUsers = function () {
         });
     });
 }
+
+exports.getLog = function (userId, fields) {
+    return new Promise((resolve, reject) => {
+        MongoClient.connect(MONGODB_URI, {useUnifiedTopology: true}, (err, client) => {
+            if (err) reject(err);
+            const collection = client.db(dbName).collection(collectionName);
+            let query = { _id: new ObjectID(userId) }
+            collection.findOne(query, (err, result) => {
+                if (err) reject (err);
+                resolve(result);
+            });
+            
+        });
+    });
+}
