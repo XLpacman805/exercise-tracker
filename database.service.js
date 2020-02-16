@@ -71,7 +71,7 @@ exports.getUsers = function () {
     });
 }
 
-exports.getLog = function (userId, fields) {
+exports.getLogs = function (userId) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(MONGODB_URI, {useUnifiedTopology: true}, (err, client) => {
             if (err) reject(err);

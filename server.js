@@ -63,11 +63,17 @@ app.get('/log', (req, res) => {
     const userId = req.query.userId;
     const fromDate = req.query.from;
     const toDate = req.query.to;
-    const limit = req.querys.limit; 
+    const limit = req.query.limit; 
 
-    console.log(userId);
-    databaseService.getLog(userId)
+    databaseService.getLogs(userId)
         .then((result) => {
+            // filter data by parameters. 
+            let logs = result.logs;
+            let filter = {}; 
+            logs.filter((exercise) => {
+                return true;
+            }); 
+
             res.json(result);
         }).catch((err) => {
             res.json({error: err});
