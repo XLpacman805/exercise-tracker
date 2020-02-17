@@ -35,8 +35,8 @@ app.post('/add', (req, res) => {
     const userId= req.body.userId;
     const description = req.body.description;
     let duration = req.body.duration;
-    let date = validateDate(req.body.date);
-    if (date instanceof Error) {res.json({error: date.message})}
+    let date = validateDate_old(req.body.date); // needs refactoring.
+    if (date instanceof Error) {res.json({error: date.message})} // needs refactoring.
     let exercise; // defined outside of try because closure!
     try {exercise = new Exercise(description, duration, date)} catch(err) {res.json({error:err.message})} //error handling. 
     databaseService.insertExercise(userId, exercise)
@@ -61,19 +61,34 @@ app.get('/users', (req, res) => {
 // Responsible for getting the exercise log for the given user and options
 app.get('/log', (req, res) => {
     const userId = req.query.userId;
-    const fromDate = req.query.from;
-    const toDate = req.query.to;
-    const limit = req.query.limit; 
+    const unixMinimum = -8640000000000000; // Minimum Valid Unix Timestamp.
+    const unixMaximum = 8640000000000000; // Maximum valid unix timestamp. 
+    // Validate and parse
+    let fromDate = validateDate(req.query.from);
+    if (fromDate.isValid) {
+        fromDate = new Date(req.query.from).toUTCString();
+    } else if (fromDate.message == "empty") {
+        fromDate = unixMinimum; 
+    } else {res.json({error: "parameter 'from' error. " + fromDate.message}); return 1;};
+    // Validate and parse
+    let toDate = validateDate(req.query.to);
+    if (toDate.isValid) {
+        toDate = new Date(req.query.to).toUTCString();
+    } else if (toDate.message == "empty") {
+        toDate = unixMaximum; 
+    } else {res.json({error: "parameter 'to' error. " + toDate.message}); return 1;};
+    // Validate and parse
+    let limit = parseInt(req.query.limit);
+    if (isNaN(limit)) {limit = -1}
 
     databaseService.getLogs(userId)
         .then((result) => {
-            // filter data by parameters. 
-            let logs = result.logs;
-            let filter = {}; 
-            logs.filter((exercise) => {
-                return true;
+            if (limit !== -1) {
+                result.logs = result.logs.slice(0, limit);
+            }
+            result.logs = result.logs.filter((exercise) => {
+                return new Date(exercise.date) >= new Date(fromDate) && new Date(exercise.date) <= new Date(toDate); 
             }); 
-
             res.json(result);
         }).catch((err) => {
             res.json({error: err});
@@ -90,7 +105,7 @@ const listener = app.listen(process.env.PORT, () => {
  * @param {String} date - A date string formatted as yyyy-mm-dd.
  * @returns {Date} - A retuns a Date object in UTC timezone.  
  */
-function validateDate (date) {
+function validateDate_old (date) {
       const dateFormatCharacterLimit = 10; // yyyy-mm-dd
       let validDate = new Error("Error validating date. Please format your date as a yyyy-mm-dd string."); //default error. 
       if (typeof(date) === "undefined" || date.length < 1) { //if date is undefined or empty
@@ -105,3 +120,22 @@ function validateDate (date) {
       }
       return new Date(validDate.toUTCString()); // Converts to UTC Date.
   }
+
+function validateDate(date) {
+    const dateFormatCharacterLimit = 10; // yyyy-mm-dd
+    if (typeof (date) === "undefined" || date.length < 1 || date.length == null) { //if date is undefined or empty
+        return { isValid: false, message: "empty" };
+    } else if (date.length === dateFormatCharacterLimit) {
+        /* if the date has the right number of characters, check if it's actually a date.
+        * If its not then do nothing and let the function throw an error.
+        */
+        let d = new Date(date);
+        if (d != "Invalid Date") {
+            return { isValid: true, message: "is yyyy-mm-dd" };
+        } else {
+            return { isValid: false, message: "Date invalid. Please ensure yyyy-mm-dd format." }
+        }
+    } else {
+        return { isValid: false, message: "Date invalid. Please ensure yyyy-mm-dd format." }
+    }
+}
