@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const path = require('path');
 const bodyParser = require('body-parser');
 const Exercise = require('./classes/Exercise').Exercise;
 const User = require('./classes/User').User;
@@ -9,7 +10,7 @@ const databaseService = require('./database.service');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.json({data: "Hello world"});
+    res.sendFile(path.join(__dirname, './static/index.html'));
 });
 
 // Responsible for inserting a new user into the database. 
