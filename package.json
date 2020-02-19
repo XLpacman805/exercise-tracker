@@ -1,6 +1,6 @@
 {
   "name": "exercise-tracker",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "An express API to perform CRUD operations on a MongoDB. Used to keep track of exercises over time. ",
   "main": "server.js",
   "scripts": {
