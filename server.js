@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const Exercise = require('./classes/Exercise').Exercise;
 const User = require('./classes/User').User;
 const databaseService = require('./database.service');
+const routePrefix = '/api/exercise/';
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -14,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 // Responsible for inserting a new user into the database. 
-app.post('/new-user', (req, res) => {
+app.post(routePrefix + 'new-user', (req, res) => {
     const username = req.body.username;
     // Create a new user with the given username.
     if (typeof(username) === "string" && username.length > 0) {
@@ -32,7 +33,7 @@ app.post('/new-user', (req, res) => {
 });
 
 // Responsible for inserting exercises into a user's log.
-app.post('/add', (req, res) => {
+app.post(routePrefix + 'add', (req, res) => {
     const userId= req.body.userId;
     const description = req.body.description;
     let duration = req.body.duration;
@@ -49,7 +50,7 @@ app.post('/add', (req, res) => {
 });
 
 // Responsible for getting all users with their id and username.
-app.get('/users', (req, res) => {
+app.get(routePrefix + 'users', (req, res) => {
     databaseService.getUsers()
         .then((result) => {
             res.json(result);
@@ -60,7 +61,7 @@ app.get('/users', (req, res) => {
 });
 
 // Responsible for getting the exercise log for the given user and options
-app.get('/log', (req, res) => {
+app.get(routePrefix + 'log', (req, res) => {
     const userId = req.query.userId;
     const unixMinimum = -8640000000000000; // Minimum Valid Unix Timestamp.
     const unixMaximum = 8640000000000000; // Maximum valid unix timestamp. 
