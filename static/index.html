@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Exercise Tracker Demo</title>
+</head>
+<body>
+<h1> Welcome to Exercise Tracker API Explorer</h1>
+
+<div style="background-color: #04837c;">
+    <h2> Create New User </h2>
+    <h3>POST /api/exercise/new-user</h3>
+    <form action="/api/exercise/new-user" method="POST" enctype="application/x-www-form-urlencoded">
+        <label>Username: </label>
+        <input type="text" id="username" name="username" aria-label="username"> 
+        <input type="submit" value="submit">
+    </form>
+</div>
+
+<div style="background-color: #04837c;">
+    <h2> Add Exercise </h2>
+    <h3>POST /api/exercise/add </h3>
+    <form action="/api/exercise/add" method="POST" enctype="application/x-www-form-urlencoded">
+        <lable>User ID: </lable>
+        <input type="text" id="userId" name="userId" aria-label="userId"> 
+        <label>Description: </label>
+        <input type="text" id="description" name="description" aria-label="description">
+        <label>Duration (in minutes): </label>
+        <input type="number" id="duration" name="duration" aria-label="duration">
+        <label>Date: </label>
+        <input type="date" id="date" name="date" aria-label="date">
+        <input type="submit" value="submit">
+    </form>
+</div>
+
+<div style="background-color: beige;">
+    <h2>GET User's Exercise Log</h2>
+    <h3>GET /api/exercise/log?{userId}[&from][&to][&limit]</h3>
+    <p>{ } = required, [ ] = optional</p>
+    <p>from, to = dates (yyyy-mm-dd); limit = number</p>
+</div>
+
+
+</body>
+</html>
